@@ -7,7 +7,7 @@ import random
 
 note_list = ["C", "D", "E", "F", "G", "A",
              "B", "c", "d", "e", "f", "g"]
-beat_dict = {0.5: "/2", 1: "", 1.5: "<", 2: "2"}
+beat_dict = {0.5: "/2", 0.75: "3/4", 1: "", 1.5: "3/2", 2: "2"}
 result_list = []
 
 
@@ -30,25 +30,9 @@ def select_note(before_note):
     return random.choice(note_list[start_index:last_index])
 
 
-def select_beat(before_beat_str):
-    print("-------------------:before::"+before_beat_str)
+def select_beat():
     beat, beat_str = random.choice(list(beat_dict.items()))
     print("-------------------:randomで取れた音の長さ"+beat_str+";;;;"+str(beat))
-
-    if beat_str == "<":
-        # 今は四分音符に対してのみなのでこれを実行
-        beat = 1
-    base_length = beat
-    # 計算の基準の長さを設定
-    if beat_str == "<":
-        base_length = beat/2
-
-    if before_beat_str == "<":
-        beat = base_length*(1.5)
-    else:
-        beat = base_length
-
-    print("-------------------:最終的な音の長さ"+beat_str+";;;;"+str(beat))
     return beat, beat_str
 
 
@@ -69,15 +53,12 @@ def make_one_bar(note):
             break
         if beat_len > 3.5:
             print("--------------拍足りない:"+str(4-beat_len))
-            if beat_str == "<":
-                score = score[0:-1]+"/2"
-                # base_length = beat/2
             score += random.choice(note_list) + "/4"
             return score+"|", note
 
         note = select_note(note)
         temp_beat_str = beat_str
-        beat, beat_str = select_beat(beat_str)
+        beat, beat_str = select_beat()
         beat_len += beat
         print("--------------[beat]:"+str(beat)+"  [beat_str]:"+str(beat_str))
 
@@ -104,7 +85,7 @@ def make_bar():
 
 def execute():
     # 4曲作る
-    for i in range(1):
+    for i in range(4):
         print("--"+str(i + 1)+"曲目")
         # 4小節作る
         resutl = make_bar()
