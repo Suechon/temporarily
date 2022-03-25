@@ -7,7 +7,7 @@ import random
 
 note_list = ["C", "D", "E", "F", "G", "A",
              "B", "c", "d", "e", "f", "g"]
-beat_dict = {0.5: "/2", 1: "", 1.5: "<", 2: "2"}
+beat_dict = {0.5: "/2", 0.75: "3/4", 1: "", 1.5: "3/2", 2: "2"}
 # beat_dict = {1: "",  2: "2"}
 result_list = []
 
@@ -16,6 +16,7 @@ def make_one_bar():
     # 合計した拍の長さ
     beat_len = 0
     score = ""
+    temp_beat_str = ""
     # 1小節分作る
     while True:
         print("----------合計"+str(beat_len)+"です")
@@ -24,17 +25,19 @@ def make_one_bar():
             print("--------------拍超えた1:"+str(beat_len))
             score += "|"
             break
+        if beat_len > 3.5:
+            print("--------------拍足りない:"+str(4-beat_len))
+            score += random.choice(note_list) + "/4"
+            return score+"|"
+
         note = random.choice(note_list)
         beat, beat_str = random.choice(list(beat_dict.items()))
+        temp_beat_str = beat_str
         beat_len += beat
 
         if beat_len > 4:
             beat_len -= beat
-            # print("--------------拍超えた2:"+str(beat_len))
-            # beat = beat_len-4
-            # print("-----------------足す:"+str(beat))
-            # score += beat_dict[beat]+"|"
-            # break
+            beat_str = temp_beat_str
             continue
         score += note
         score += beat_str
